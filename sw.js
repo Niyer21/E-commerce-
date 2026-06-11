@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ucab-ecommerce-v1';
+const CACHE_NAME = 'ucab-ecommerce-v6';
 const ASSETS = [
   'index.html',
   'styles.css',
@@ -32,20 +32,19 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
     
-    // Avoid caching Chrome extensions or external API calls dynamically
     const isLocalRequest = event.request.url.startsWith(self.location.origin);
     
     event.respondWith(
         caches.match(event.request)
             .then(cachedResponse => {
                 if (cachedResponse) {
-                    // Stale-while-revalidate for local assets
+
                     if (isLocalRequest) {
                         fetch(event.request).then(networkResponse => {
                             if (networkResponse.status === 200) {
                                 caches.open(CACHE_NAME).then(cache => cache.put(event.request, networkResponse));
                             }
-                        }).catch(() => {/* Ignore offline network errors */});
+                        }).catch(() => {});
                     }
                     return cachedResponse;
                 }

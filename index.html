@@ -133,9 +133,9 @@
                 </form>
             </div>
             <div id="recovery-step-2" class="hidden">
-                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+                <hr>
                 <h3>Establecer Nueva Contraseña</h3>
-                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">Correo validado: <strong id="recovery-validated-email"></strong></p>
+                <p>Correo validado: <strong id="recovery-validated-email"></strong></p>
                 <form id="reset-password-form">
                     <label for="new-password">Nueva Contraseña:</label>
                     <input type="password" id="new-password" required>
@@ -144,12 +144,19 @@
                     <button type="submit">Cambiar Contraseña</button>
                 </form>
             </div>
-            <button id="btn-back-to-auth" class="btn-secondary" style="margin-top: 1.5rem; width: 100%;">Volver al Login</button>
+            <button id="btn-back-to-auth" class="btn-secondary">Volver al Login</button>
         </section>
 
         <section id="profile-view" class="hidden">
             <h2>Gestión de Perfil</h2>
             <form id="profile-form">
+                <div id="profile-avatar-container">
+                    <img id="profile-avatar-preview" src="" alt="Avatar">
+                    <div id="profile-avatar-placeholder">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                </div>
+
                 <label for="prof-name">Nombre:</label>
                 <input type="text" id="prof-name">
 
@@ -161,7 +168,7 @@
 
                 <button type="submit">Guardar Cambios</button>
             </form>
-            <button id="btn-logout" class="btn-danger" style="margin-top: 1.5rem; width: 100%;">Cerrar Sesión</button>
+            <button id="btn-logout" class="btn-danger">Cerrar Sesión</button>
         </section>
 
 
@@ -204,7 +211,7 @@
                     <label for="card-name">Nombre en la Tarjeta:</label>
                     <input type="text" id="card-name" required>
 
-                    <label for="card-number">Número de Tarjeta: <span id="card-brand-badge" style="font-weight: bold; margin-left: 10px; display: none;"></span></label>
+                    <label for="card-number">Número de Tarjeta: <span id="card-brand-badge"></span></label>
                     <input type="text" id="card-number" placeholder="16 dígitos numéricos" maxlength="16" required>
 
                     <label for="card-expiry">Fecha de Expiración:</label>
@@ -222,13 +229,42 @@
         <section id="admin-view" class="hidden">
             <h2>Panel de Control - Administrador</h2>
             
-            <div id="admin-metrics">
+            <div id="admin-metrics-section">
                 <h3>Métricas de Rendimiento</h3>
-                <p>Total de ingresos generados: $<span id="metric-revenue">0.00</span></p>
-                <p style="font-weight: 600; margin-bottom: 0.5rem;">Top 3 productos más vendidos:</p>
-                <div id="metric-top-products-chart" style="margin-bottom: 1.5rem;">
+                <div id="admin-metrics">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="metric-info">
+                            <h4>Ingresos Totales</h4>
+                            <div class="metric-value">$<span id="metric-revenue">0.00</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="metric-info">
+                            <h4>Control de Usuarios</h4>
+                            <div class="users-metric-details">
+                                <p>Registrados: <strong id="metric-registered-users">0</strong></p>
+                                <p>Activos: <strong id="metric-active-users">0</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card chart-card">
+                        <div class="metric-icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a7 7 0 0 0-7 7c0 2.22 1.2 4.16 3 5.2V2h8v12.2c1.8-1.04 3-2.98 3-5.2a7 7 0 0 0-7-7z"/></svg>
+                        </div>
+                        <div class="metric-info">
+                            <h4>Top 3 Más Vendidos</h4>
+                            <div id="metric-top-products-chart"></div>
+                        </div>
+                    </div>
                 </div>
-                <p>Contador de Usuarios: <span id="metric-registered-users">0</span> Registrados / <span id="metric-active-users">0</span> Activos</p>
             </div>
 
             <div id="admin-inventory">

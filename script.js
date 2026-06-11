@@ -200,6 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
             irAVista("admin-view");
             return;
         }
+        if (vistaId === "cart-view" && !usuarioActivo) {
+            alert("Para acceder al carrito de compras, debes registrarte o iniciar sesión.");
+            irAVista("auth-view");
+            return;
+        }
         if (vistaId === "profile-view" && !usuarioActivo) {
             irAVista("auth-view");
             return;
@@ -277,7 +282,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("login-form").reset();
                 actualizarInterfazUsuarioLogueado();
                 actualizarPanelAdmin();
-                irAVista("landing-view");
+                if (usuarioActivo.role === "Administrador") {
+                    irAVista("admin-view");
+                } else {
+                    irAVista("catalog-view");
+                }
             } else {
                 alert("Las credenciales provistas no coinciden con nuestros registros.");
             }
@@ -339,6 +348,29 @@ document.addEventListener("DOMContentLoaded", () => {
             actualizarInterfazUsuarioLogueado();
             alert("Cambios guardados localmente.");
         });
+
+        const profAvatarInput = document.getElementById("prof-avatar");
+        if (profAvatarInput) {
+            profAvatarInput.addEventListener("input", (e) => {
+                const url = e.target.value;
+                const imgPreview = document.getElementById("profile-avatar-preview");
+                const placeholder = document.getElementById("profile-avatar-placeholder");
+                if (imgPreview && placeholder) {
+                    if (url) {
+                        imgPreview.src = url;
+                        imgPreview.style.display = "inline-block";
+                        placeholder.style.display = "none";
+                        imgPreview.onerror = () => {
+                            imgPreview.style.display = "none";
+                            placeholder.style.display = "flex";
+                        };
+                    } else {
+                        imgPreview.style.display = "none";
+                        placeholder.style.display = "flex";
+                    }
+                }
+            });
+        }
 
         document.getElementById("crud-product-form").addEventListener("submit", (e) => {
             e.preventDefault();
@@ -408,11 +440,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const brand = detectarMarcaTarjeta(val);
                 if (brand === "visa") {
-                    badge.innerText = "Visa 💳";
+                    badge.innerText = "Visa";
                     badge.className = "visa";
                     badge.style.display = "inline-block";
                 } else if (brand === "mastercard") {
-                    badge.innerText = "Mastercard 💳";
+                    badge.innerText = "Mastercard";
                     badge.className = "mastercard";
                     badge.style.display = "inline-block";
                 } else {
@@ -438,6 +470,23 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("prof-avatar").value = usuarioActivo.avatar || "";
             document.getElementById("prof-address").value = usuarioActivo.address || "";
 
+            const imgPreview = document.getElementById("profile-avatar-preview");
+            const placeholder = document.getElementById("profile-avatar-placeholder");
+            if (imgPreview && placeholder) {
+                if (usuarioActivo.avatar) {
+                    imgPreview.src = usuarioActivo.avatar;
+                    imgPreview.style.display = "inline-block";
+                    placeholder.style.display = "none";
+                    imgPreview.onerror = () => {
+                        imgPreview.style.display = "none";
+                        placeholder.style.display = "flex";
+                    };
+                } else {
+                    imgPreview.style.display = "none";
+                    placeholder.style.display = "flex";
+                }
+            }
+
             if (usuarioActivo.role === "Administrador") {
                 if (btnAdmin) btnAdmin.classList.remove("hidden");
                 if (btnCarrito) btnCarrito.parentElement.classList.add("hidden");
@@ -452,7 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             if (btnAdmin) btnAdmin.classList.add("hidden");
             if (btnPerfil) btnPerfil.classList.add("hidden");
-            if (btnCarrito) btnCarrito.parentElement.classList.remove("hidden");
+            if (btnCarrito) btnCarrito.parentElement.classList.add("hidden");
         }
     }
 
@@ -508,7 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h4>${p.title}</h4>
                 <p><small>${p.category}</small></p>
                 <p class="price">$${p.price.toFixed(2)}</p>
-                <div class="rating-box">⭐ ${promedioEstrellas} (${p.reviews.length} reseñas)</div>
+                <div class="rating-box">★ ${promedioEstrellas} (${p.reviews.length} reseñas)</div>
             `;
 
             if (!usuarioActivo || usuarioActivo.role === "Cliente") {
@@ -541,7 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             htmlContenido += `
                 <div class="comments-box">
-                    ${p.reviews.map(r => `<div><strong>${r.autor || 'Anónimo'}</strong> (⭐${r.rating}): ${r.comment}</div>`).join("")}
+                    ${p.reviews.map(r => `<div><strong>${r.autor || 'Anónimo'}</strong> (★${r.rating}): ${r.comment}</div>`).join("")}
                 </div>
             `;
 
@@ -584,6 +633,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelectorAll(".btn-submit-review").forEach(btn => {
             btn.addEventListener("click", (e) => {
+                if (!usuarioActivo) {
+                    alert("Para enviar una reseña, debes registrarte o iniciar sesión.");
+                    irAVista("auth-view");
+                    return;
+                }
                 const pId = parseInt(e.target.getAttribute("data-id"));
                 const rating = parseInt(document.querySelector(`.select-rating[data-id="${pId}"]`).value);
                 const commentInput = document.querySelector(`.input-comment[data-id="${pId}"]`);
@@ -635,6 +689,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function agregarAlCarrito(id) {
+        if (!usuarioActivo) {
+            alert("Para agregar productos al carrito y realizar compras, debes registrarte o iniciar sesión.");
+            irAVista("auth-view");
+            return;
+        }
         const prod = productos.find(p => p.id === id);
         if (!prod) return;
 
@@ -759,10 +818,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cardNumber.length !== 16) {
             alert("El número de tarjeta debe tener exactamente 16 dígitos.");
-            return;
-        }
-        if (!validarLuhn(cardNumber)) {
-            alert("Número de tarjeta inválido (Falló la comprobación Luhn).");
             return;
         }
 
