@@ -1,0 +1,9 @@
+{
+  "name": "ucab-ecommerce-premium",
+  "version": "1.0.0",
+  "description": "E-commerce client-side premium application with offline capacity, advanced validation, and dashboard.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y http-server -p 3000"
+  }
+}
