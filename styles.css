@@ -1,4 +1,4 @@
-
+/* Variables globales y temas */
 :root {
 
     --bg-primary: #f4f6f3;
@@ -67,6 +67,7 @@ body {
     display: none !important;
 }
 
+/* Personalizacion de la barra de desplazamiento */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -330,6 +331,7 @@ input:focus, select:focus, textarea:focus {
     background-color: var(--bg-card);
 }
 
+/* Estilo general de los botones */
 button, input[type="submit"] {
     background-color: var(--primary);
     color: #ffffff;
@@ -374,6 +376,7 @@ button:active, input[type="submit"]:active {
     background-color: #bd3f3b;
 }
 
+/* Controles de filtrado y busqueda del catalogo */
 #catalog-controls {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -436,6 +439,7 @@ button:active, input[type="submit"]:active {
     color: var(--primary);
 }
 
+/* Tarjetas de productos del catalogo */
 .product-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -572,6 +576,7 @@ button:active, input[type="submit"]:active {
     font-size: 0.85rem;
 }
 
+/* Resumen y total de la compra en el carrito */
 #cart-summary {
     background-color: var(--bg-primary);
     padding: 2rem;
@@ -611,6 +616,7 @@ button:active, input[type="submit"]:active {
     background-color: #eb001b;
 }
 
+/* Panel de administracion y estadisticas */
 #admin-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -736,6 +742,7 @@ button:active, input[type="submit"]:active {
     transition: width 1s ease-in-out;
 }
 
+/* Tablas de datos generales */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -855,6 +862,7 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* Adaptacion responsive para pantallas pequenas */
 @media (max-width: 992px) {
     main {
         margin: 1.5rem auto;

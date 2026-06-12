@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initApplication();
 
+    // Inicializacion principal de la aplicacion
     function initApplication() {
         cargarPersistenciaLocal();
         poblarCategoriasFiltro();
@@ -58,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         irAVista("landing-view");
     }
 
+    // Registro del service worker para soporte offline
     function registrarServiceWorker() {
         if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
             navigator.serviceWorker.register('sw.js')
@@ -66,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Carga de datos iniciales desde el almacenamiento local
     function cargarPersistenciaLocal() {
         productos = JSON.parse(safeStorage.getItem("ucab_products")) || [];
         usuarios = JSON.parse(safeStorage.getItem("ucab_users")) || [];
@@ -118,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         safeStorage.setItem("ucab_cart", JSON.stringify(carrito));
     }
 
+    // Consulta de productos desde la API externa al iniciar
     async function fetchProductosIniciales() {
         try {
             const response = await fetch(API_URL);
@@ -144,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Control de eventos de navegacion para la SPA
     function configurarNavegacionSPA() {
         const mapeoBotones = {
             "btn-nav-landing": "landing-view",
@@ -188,6 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Navegacion entre las vistas de la SPA
     function irAVista(vistaId) {
 
         if (vistaId === "admin-view" && (!usuarioActivo || usuarioActivo.role !== "Administrador")) {
@@ -222,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (vistaId === "landing-view") renderizarCatalogo();
     }
 
+    // Manejo de eventos de envio para los formularios
     function configurarFormularios() {
 
         document.getElementById("btn-logout").addEventListener("click", () => {
@@ -456,6 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Actualiza la visualizacion del menu segun la sesion
     function actualizarInterfazUsuarioLogueado() {
         const btnAuth = document.getElementById("btn-nav-auth");
         const btnAdmin = document.getElementById("btn-nav-admin");
@@ -512,6 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("max-price").addEventListener("input", renderizarCatalogo);
     }
 
+    // Agrega las categorias de productos al menu desplegable
     function poblarCategoriasFiltro() {
         const select = document.getElementById("category-filter");
         select.innerHTML = '<option value="all">Todas</option>';
@@ -525,6 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Genera y muestra las tarjetas de productos en pantalla
     function renderizarCatalogo() {
         const container = document.getElementById("products-container");
         const destacadosContainer = document.getElementById("destacados-container");
@@ -688,6 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Agrega un producto seleccionado al carrito de compras
     function agregarAlCarrito(id) {
         if (!usuarioActivo) {
             alert("Para agregar productos al carrito y realizar compras, debes registrarte o iniciar sesión.");
@@ -718,6 +729,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("cart-count").innerText = totalItems;
     }
 
+    // Actualiza el listado y los totales del carrito
     function renderizarCarrito() {
         const listContainer = document.getElementById("cart-items-list");
         if (!listContainer) return;
@@ -806,6 +818,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Procesamiento del formulario de pago y compras
     function procesarCheckoutOrden() {
         if (carrito.length === 0) {
             alert("No hay elementos para procesar en la pasarela de pago.");
@@ -888,6 +901,7 @@ document.addEventListener("DOMContentLoaded", () => {
         guardarProductosLocal();
     }
 
+    // Sincronizacion de datos al recuperar conexion
     function procesarColaOfflineSincronizacion() {
         const ind = document.getElementById("status-text");
         if (ind) {
@@ -1045,6 +1059,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Configura y cambia el tema claro u oscuro
     function configurarTema() {
         const toggleBtn = document.getElementById("theme-toggle");
         if (!toggleBtn) return;
@@ -1071,6 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Validacion de tarjeta con algoritmo de Luhn
     function validarLuhn(numero) {
         let sum = 0;
         let shouldDouble = false;
@@ -1087,6 +1103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return (sum % 10) === 0;
     }
 
+    // Deteccion automatica de la marca de tarjeta
     function detectarMarcaTarjeta(numero) {
         if (numero.startsWith("4")) {
             return "visa";
