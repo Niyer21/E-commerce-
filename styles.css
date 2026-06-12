@@ -83,8 +83,8 @@ body {
 
 header {
     background-color: var(--bg-surface);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-color);
     padding: 1.25rem 2.5rem;
     position: sticky;
@@ -204,6 +204,7 @@ h2 {
     font-weight: 900;
     color: rgba(92, 127, 67, 0.03);
     pointer-events: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -406,7 +407,6 @@ button:active, input[type="submit"]:active {
 
 #destacados-container .product-card {
     padding: 1.25rem;
-    min-height: auto;
 }
 
 #destacados-container .product-card img {
@@ -420,6 +420,7 @@ button:active, input[type="submit"]:active {
     margin-bottom: 0.25rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 2.4rem;
@@ -476,6 +477,7 @@ button:active, input[type="submit"]:active {
     color: var(--text-primary);
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 3rem;

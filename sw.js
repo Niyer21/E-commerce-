@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ucab-ecommerce-v6';
+const CACHE_NAME = 'ucab-ecommerce-v7';
 const ASSETS = [
   'index.html',
   'styles.css',
